@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marc Gio &amp; Christelene — January 8, 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Playfair+Display:wght@500;600;700&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy: #6d0f24;
+    --burgundy-deep: #4a0916;
+    --cream: #f2ece2;
+    --blush: #e8b9b3;
+    --blush-soft: #f3ded9;
+    --ink: #3a1013;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  }
+
+  /* decorative vine spine that threads the page, echoing the heart timeline in the design */
+  .spine{
+    position:fixed;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:2px;
+    transform:translateX(-50%);
+    background: repeating-linear-gradient(to bottom, transparent 0 8px, rgba(109,15,36,0.18) 8px 9px);
+    z-index:0;
+    pointer-events:none;
+  }
+  @media (max-width: 720px){ .spine{ display:none; } }
+
+  .petal{
+    position:fixed;
+    z-index:0;
+    pointer-events:none;
+    opacity:0.5;
+  }
+
+  header.hero{
+    position:relative;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:6vh 5vw;
+    background: var(--cream);
+    overflow:hidden;
+  }
+
+  .hero-frame{
+    position:relative;
+    width:min(92vw, 480px);
+    opacity:0;
+    transform: translateY(24px) scale(0.98);
+    animation: heroIn 1.4s cubic-bezier(.2,.7,.2,1) forwards;
+    animation-delay: .2s;
+  }
+  @keyframes heroIn{
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .hero-frame img{
+    width:100%;
+    display:block;
+    filter: drop-shadow(0 30px 60px rgba(74,9,22,0.18));
+  }
+
+  .scroll-cue{
+    position:absolute;
+    bottom:4vh;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Montserrat', sans-serif;
+    font-size:.68rem;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color: var(--burgundy);
+    opacity:.7;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+    animation: floatCue 2.4s ease-in-out infinite;
+  }
+  .scroll-cue::after{
+    content:"";
+    width:1px;
+    height:34px;
+    background: var(--burgundy);
+    opacity:.5;
+  }
+  @keyframes floatCue{
+    0%,100%{ transform:translate(-50%,0); }
+    50%{ transform:translate(-50%,8px); }
+  }
+
+  section{
+    position:relative;
+    z-index:1;
+    padding: 9vh 5vw;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+  }
+
+  .eyebrow{
+    font-family:'Montserrat', sans-serif;
+    font-size:.72rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color: var(--burgundy);
+    margin-bottom: 18px;
+    opacity:0;
+    transform:translateY(14px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .eyebrow.in-view{ opacity:1; transform:translateY(0); }
+
+  .panel{
+    width:min(92vw, 460px);
+    border-radius: 2px;
+    overflow:hidden;
+    box-shadow: 0 25px 50px rgba(74,9,22,0.14);
+    opacity:0;
+    transform: translateY(40px);
+    transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1);
+  }
+  .panel.in-view{ opacity:1; transform:translateY(0); }
+
+  .panel img{
+    width:100%;
+    display:block;
+    cursor:pointer;
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+    transform-origin:center;
+  }
+  .panel img:hover,
+  .panel img:focus-visible,
+  .panel.tapped img{
+    transform: scale(1.045);
+  }
+
+  .caption{
+    margin-top: 22px;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.05rem;
+    color: var(--burgundy);
+    opacity:.85;
+    max-width:420px;
+  }
+
+  /* RSVP */
+  .rsvp{
+    background: linear-gradient(180deg, var(--cream) 0%, var(--blush-soft) 100%);
+  }
+  .rsvp h2{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    color: var(--burgundy-deep);
+    margin-bottom: 14px;
+    opacity:0;
+    transform:translateY(16px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .rsvp h2.in-view{ opacity:1; transform:translateY(0); }
+
+  .rsvp p{
+    max-width: 480px;
+    font-size:1.15rem;
+    line-height:1.6;
+    color: var(--ink);
+    margin-bottom: 34px;
+    opacity:0;
+    transform:translateY(16px);
+    transition: opacity .8s ease .1s, transform .8s ease .1s;
+  }
+  .rsvp p.in-view{ opacity:1; transform:translateY(0); }
+
+  .rsvp-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Montserrat', sans-serif;
+    font-weight:600;
+    font-size:.85rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color: var(--cream);
+    background: var(--burgundy);
+    padding: 20px 46px;
+    border-radius: 999px;
+    text-decoration:none;
+    box-shadow: 0 16px 34px rgba(109,15,36,0.35);
+    transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, background .35s ease;
+    opacity:0;
+    transform:translateY(16px);
+  }
+  .rsvp-btn.in-view{ opacity:1; transform:translateY(0); }
+  .rsvp-btn:hover{
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 22px 44px rgba(109,15,36,0.45);
+    background: var(--burgundy-deep);
+  }
+  .rsvp-btn svg{ width:16px; height:16px; }
+
+  .rsvp-note{
+    margin-top:18px;
+    font-family:'Montserrat', sans-serif;
+    font-size:.72rem;
+    letter-spacing:.08em;
+    color: var(--burgundy);
+    opacity:.65;
+  }
+
+  /* Venue */
+  .venue{
+    background: var(--burgundy);
+    color: var(--cream);
+  }
+  .venue .eyebrow{ color: var(--blush); }
+  .venue h2{
+    font-family:'Playfair Display', serif;
+    font-weight:600;
+    font-size: clamp(1.9rem, 5.5vw, 2.5rem);
+    margin-bottom: 6px;
+    opacity:0;
+    transform:translateY(16px);
+    transition: opacity .8s ease, transform .8s ease;
+  }
+  .venue h2.in-view{ opacity:1; transform:translateY(0); }
+  .venue .sub{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.15rem;
+    color: var(--blush-soft);
+    margin-bottom: 40px;
+    opacity:0;
+    transform:translateY(16px);
+    transition: opacity .8s ease .05s, transform .8s ease .05s;
+  }
+  .venue .sub.in-view{ opacity:1; transform:translateY(0); }
+
+  .qr-card{
+    background: var(--cream);
+    padding: 26px;
+    border-radius: 6px;
+    display:inline-flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    box-shadow: 0 24px 50px rgba(0,0,0,0.3);
+    opacity:0;
+    transform: translateY(24px) scale(0.96);
+    transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .qr-card.in-view{ opacity:1; transform:translateY(0) scale(1); }
+  .qr-card img{
+    width: 176px;
+    height: 176px;
+    display:block;
+  }
+  .qr-card span{
+    font-family:'Montserrat', sans-serif;
+    font-size:.68rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color: var(--burgundy);
+  }
+
+  .venue-link{
+    margin-top: 24px;
+    font-family:'Montserrat', sans-serif;
+    font-size:.78rem;
+    letter-spacing:.1em;
+    color: var(--cream);
+    text-decoration:none;
+    border-bottom: 1px solid rgba(242,236,226,0.5);
+    padding-bottom: 3px;
+    opacity:.85;
+    transition: opacity .3s ease;
+  }
+  .venue-link:hover{ opacity:1; }
+
+  footer{
+    position:relative;
+    z-index:1;
+    padding: 6vh 5vw 8vh;
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:1.1rem;
+    color: var(--burgundy);
+  }
+  footer .names{
+    display:block;
+    font-family:'Playfair Display', serif;
+    font-style:normal;
+    font-weight:600;
+    font-size:1.3rem;
+    margin-top:8px;
+    color: var(--burgundy-deep);
+  }
+
+  /* sticky mini RSVP button for mobile convenience */
+  .sticky-rsvp{
+    position:fixed;
+    bottom:18px;
+    left:50%;
+    transform:translateX(-50%) translateY(120%);
+    z-index:10;
+    font-family:'Montserrat', sans-serif;
+    font-weight:600;
+    font-size:.75rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color: var(--cream);
+    background: var(--burgundy);
+    padding: 14px 30px;
+    border-radius: 999px;
+    text-decoration:none;
+    box-shadow: 0 14px 30px rgba(109,15,36,0.4);
+    transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  }
+  .sticky-rsvp.show{ transform:translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<div class="spine" aria-hidden="true"></div>
+
+<header class="hero">
+  <div class="hero-frame">
+    <img src="images/1.png" alt="Marc Gio and Christelene are getting married — 8th of January 2027 at 2:30 PM, Saint Williams Cathedral Church, Las Colinas, Paoay">
+  </div>
+  <div class="scroll-cue">Scroll</div>
+</header>
+
+<section id="timeline">
+  <div class="eyebrow">The Day</div>
+  <div class="panel">
+    <img src="images/3.png" alt="Wedding timeline" tabindex="0">
+  </div>
+  <p class="caption">Tap or hover the invitation cards throughout this page for a closer look.</p>
+</section>
+
+<section id="entourage">
+  <div class="eyebrow">With Love From</div>
+  <div class="panel">
+    <img src="images/4.png" alt="Parents of the groom and bride" tabindex="0">
+  </div>
+</section>
+
+<section id="sponsors">
+  <div class="eyebrow">Principal Sponsors</div>
+  <div class="panel">
+    <img src="images/5.png" alt="Principal sponsors" tabindex="0">
+  </div>
+</section>
+
+<section id="party">
+  <div class="eyebrow">The Wedding Party</div>
+  <div class="panel">
+    <img src="images/6.png" alt="Best man, maid of honor, groomsmen, bridesmaids, and flower girls" tabindex="0">
+  </div>
+</section>
+
+<section id="details">
+  <div class="eyebrow">Good to Know</div>
+  <div class="panel">
+    <img src="images/2.png" alt="Dress code, gift guide, and privacy note" tabindex="0">
+  </div>
+</section>
+
+<section class="rsvp" id="rsvp">
+  <div class="eyebrow">Kindly Reply</div>
+  <h2>Will You Join Us?</h2>
+  <p>We've saved a seat for you at the table. Please let us know if you'll be celebrating with us by December&nbsp;1, so we can prepare accordingly.</p>
+  <a class="rsvp-btn" href="https://forms.gle/G21uvYsacjF7baYs8" target="_blank" rel="noopener">
+    RSVP Now
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </a>
+  <div class="rsvp-note">Opens the RSVP form in a new tab</div>
+</section>
+
+<section class="venue" id="venue">
+  <div class="eyebrow">Find Us</div>
+  <h2>Las Colinas, Paoay</h2>
+  <div class="sub">Saint Williams Cathedral Church &middot; Reception to follow</div>
+  <div class="qr-card">
+    <img src="images/venue_qr.png" alt="QR code linking to Google Maps directions for Las Colinas, Paoay">
+    <span>Scan for Directions</span>
+  </div>
+  <br>
+  <a class="venue-link" href="https://www.google.com/maps/search/?api=1&query=Las+Colinas+Paoay+Bgy+15+Suba+Paoay+Ilocos+Norte" target="_blank" rel="noopener">Open in Google Maps →</a>
+</section>
+
+<footer>
+  We can't wait to celebrate with you
+  <span class="names">Marc Gio &amp; Christelene</span>
+</footer>
+
+<a class="sticky-rsvp" id="stickyRsvp" href="https://forms.gle/G21uvYsacjF7baYs8" target="_blank" rel="noopener">RSVP</a>
+
+<script>
+  // reveal-on-scroll
+  const revealEls = document.querySelectorAll('.eyebrow, .panel, .rsvp h2, .rsvp p, .rsvp-btn, .venue h2, .venue .sub, .qr-card');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+        }
+      });
+    }, { threshold: 0.2 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in-view'));
+  }
+
+  // tap-to-pop on touch devices (hover doesn't exist there)
+  document.querySelectorAll('.panel').forEach(panel => {
+    panel.addEventListener('click', () => {
+      panel.classList.toggle('tapped');
+    });
+  });
+
+  // sticky RSVP button appears after hero, hides once native RSVP button is in view
+  const hero = document.querySelector('.hero');
+  const rsvpBtn = document.querySelector('.rsvp-btn');
+  const sticky = document.getElementById('stickyRsvp');
+  const heroObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      sticky.classList.toggle('show', !entry.isIntersecting);
+    });
+  }, { threshold: 0 });
+  heroObs.observe(hero);
+
+  const rsvpObs = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) sticky.classList.remove('show');
+    });
+  }, { threshold: 0.3 });
+  rsvpObs.observe(rsvpBtn);
+</script>
+
+</body>
+</html>
